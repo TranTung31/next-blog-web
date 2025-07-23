@@ -1,16 +1,18 @@
-'use client'
+"use client";
 
-import { Form, Input, InputProps } from 'antd'
-import { TextAreaProps } from 'antd/es/input'
-import React from 'react'
-import { twMerge } from 'tailwind-merge'
+import { Form, Input, InputNumber, InputNumberProps, InputProps } from "antd";
+import { Rule } from "antd/es/form";
+import { TextAreaProps } from "antd/es/input";
+import React from "react";
+import { twMerge } from "tailwind-merge";
 
 interface IInputFormProps extends InputProps {
-  name: string
-  label: string
-  required?: boolean
-  className?: string
-  inputClassName?: string
+  name: string;
+  label?: string;
+  required?: boolean;
+  rules?: Rule[];
+  className?: string;
+  inputClassName?: string;
 }
 
 const IInputForm = ({
@@ -19,6 +21,7 @@ const IInputForm = ({
   inputClassName,
   label,
   required = false,
+  rules,
   ...props
 }: IInputFormProps) => {
   return (
@@ -26,21 +29,22 @@ const IInputForm = ({
       name={name}
       label={label}
       required={required}
-      className={className}
+      rules={rules}
+      className={`!mb-0 ${className}`}
     >
-      <Input className={twMerge('w-full', inputClassName)} {...props} />
+      <Input className={twMerge("w-full", inputClassName)} {...props} />
     </Form.Item>
-  )
-}
+  );
+};
 
-export default IInputForm
+export default IInputForm;
 
 interface ITextAreaFormProps extends TextAreaProps {
-  name: string
-  label: string
-  required?: boolean
-  className?: string
-  inputClassName?: string
+  name: string;
+  label?: string;
+  required?: boolean;
+  className?: string;
+  inputClassName?: string;
 }
 
 // eslint-disable-next-line react/display-name
@@ -57,9 +61,41 @@ IInputForm.TextArea = ({
       name={name}
       label={label}
       required={required}
-      className={className}
+      className={`!mb-0 ${className}`}
     >
       <Input.TextArea className={inputClassName} {...props} />
     </Form.Item>
-  )
+  );
+};
+
+interface IInputNumberFormProps extends InputNumberProps {
+  name: string;
+  label?: string;
+  required?: boolean;
+  rules?: Rule[];
+  className?: string;
+  inputClassName?: string;
 }
+
+// eslint-disable-next-line react/display-name
+IInputForm.Number = ({
+  name,
+  className,
+  inputClassName,
+  label,
+  required = false,
+  rules,
+  ...props
+}: IInputNumberFormProps) => {
+  return (
+    <Form.Item
+      name={name}
+      label={label}
+      required={required}
+      rules={rules}
+      className={`!mb-0 ${className}`}
+    >
+      <InputNumber className={twMerge("!w-full", inputClassName)} {...props} />
+    </Form.Item>
+  );
+};
