@@ -125,3 +125,11 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+.ant-form-item-control-input:has(.ant-checkbox-wrapper) {
+  min-height: 0 !important;
+}
+
+.anticon svg {
+  display: block !important;
+}

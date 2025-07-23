@@ -1,17 +1,20 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export type MetaType = {
-  page: number
-  pageSize: number
-  total?: number
+  page: number;
+  pageSize: number;
+  total?: number;
   filter?: {
-    filterText?: string
-    sortColumn?: string
-    sortDirection?: number
-  }
-}
+    filterText?: string;
+    sortColumn?: string;
+    sortDirection?: number;
+  };
+};
 
 export type BaseResponseType = {
-  status: boolean
-  message: string
-  result: any
-}
+  status: boolean;
+  message: string;
+  result: any;
+};
+
+export const ModalType = ["create", "edit", "view"] as const;
+export type TModalType = (typeof ModalType)[number];

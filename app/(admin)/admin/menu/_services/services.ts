@@ -1,54 +1,74 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { MetaType } from '@/types/common'
-import axiosInstance from '@/utils/axios-instance'
-import BaseServices from '@/utils/base-services'
-import useSWR from 'swr'
+import { MetaType } from "@/types/common";
+import axiosInstance from "@/utils/axios-instance";
+import BaseServices from "@/utils/base-services";
+import useSWR from "swr";
 
 class services extends BaseServices {
   getMenuTree = <T>() => {
     type MenuTreeType = {
-      isLoading: boolean
-      data: T
-      error: any
-    }
+      isLoading: boolean;
+      data: T;
+      error: any;
+    };
 
     const { isLoading, data, error } = useSWR<T>(
-      'menu/tree',
+      "menu/tree",
       async () => {
-        return (await axiosInstance.get('menu/tree')) as T
+        return (await axiosInstance.get("menu/tree")) as T;
       },
       {
         revalidateOnFocus: false,
       }
-    )
+    );
 
-    return { isLoading, data, error } as MenuTreeType
-  }
+    return { isLoading, data, error } as MenuTreeType;
+  };
+
+  getMenuSelect = () => {
+    const { isLoading, data, error } = useSWR(
+      "menu/select",
+      async () => {
+        const response = (await axiosInstance.get("menu/select")) as any;
+        return response?.result?.length > 0
+          ? response?.result?.map((item: any) => ({
+              value: item?.id,
+              label: item?.name,
+            }))
+          : [];
+      },
+      {
+        revalidateOnFocus: false,
+      }
+    );
+
+    return { isLoading, data, error };
+  };
 
   getPagingMenu = <T>(meta: MetaType) => {
-    const textSearch = meta.filter?.filterText
+    const textSearch = meta.filter?.filterText;
     const { data, isLoading, error, mutate } = useSWR<T>(
       `menu?page=${meta.page}&pageSize=${meta.pageSize}&filterText=${meta.filter?.filterText}`,
       async () => {
         return (await axiosInstance.get(
           `menu?page=${meta.page}&pageSize=${meta.pageSize}${
-            textSearch ? `&filterText=${textSearch}` : ''
+            textSearch ? `&filterText=${textSearch}` : ""
           }`
-        )) as T
+        )) as T;
       },
       { revalidateOnFocus: false }
-    )
+    );
 
     return {
       data,
       isLoading,
       error,
       mutate,
-    }
-  }
+    };
+  };
 }
 
-const menuServices = new services('menu')
+const menuServices = new services("menu");
 
-export { menuServices }
+export { menuServices };
